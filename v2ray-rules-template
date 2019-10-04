@@ -1,0 +1,102 @@
+#!/usr/bin/nft -f
+table inet v2ray {
+    set ipv4_private {
+        type ipv4_addr
+        flags interval
+        elements = { 10.0.0.0/8,
+                     172.16.0.0/12,
+                     192.168.0.0/16,
+		     169.254.0.0/16 }
+    }
+
+    set ipv6_private {
+        type ipv6_addr
+        flags interval
+        elements = { fd00::/8,
+		     fe80::/10 }
+    }
+
+    set ipv4_dst_bp {
+    	type ipv4_addr
+	    flags interval
+    }
+
+    set ipv4_dst_fw { 
+        type ipv4_addr
+        flags interval
+    }
+
+    set ipv4_src_bp { 
+        type ipv4_addr
+        flags interval
+    }
+
+    set ipv4_src_fw { 
+        type ipv4_addr
+        flags interval
+    }
+
+    set ipv6_dst_bp {
+        type ipv6_addr
+	    flags interval
+    }
+
+    set ipv6_dst_fw { 
+        type ipv6_addr
+        flags interval
+    }
+
+    set ipv6_src_bp { 
+        type ipv6_addr
+        flags interval
+    }
+
+    set ipv6_src_fw { 
+        type ipv6_addr
+        flags interval
+    }
+
+    chain v2ray_PREROUTING {
+        type nat hook prerouting priority dstnat; policy accept;
+    }
+
+    chain v2ray_OUTPUT {
+        type nat hook prerouting priority dstnat; policy accept;
+        jump v2ray_SERVER_AC
+        jump v2ray_SRC_FW
+        jump v2ray_SRC_AC
+        jump v2ray_DST_FW
+        jump v2ray_DST_AC
+        jump v2ray_FW
+    }
+
+    chain v2ray_SERVER_AC {
+
+    }
+
+    chain v2ray_SRC_AC {
+        ip saddr @ipv4_src_bp accept
+        ip6 saddr @ipv6_src_bp accept
+    }
+
+    chain v2ray_SRC_FW {
+        ip saddr @ipv4_src_fw jump v2ray_FW
+        ip6 saddr @ipv6_src_fw jump v2ray_FW
+    }
+
+    chain v2ray_DST_AC {
+        ip daddr @ipv4_private accept
+        ip6 daddr @ipv6_private accept
+        ip daddr @ipv4_dst_bp accept
+        ip6 daddr @ipv6_dst_bp accept
+    }
+
+    chain v2ray_DST_FW {
+        ip daddr @ipv4_dst_fw jump v2ray_FW
+        ip6 daddr @ipv6_dst_fw jump v2ray_FW
+    }
+
+    chain v2ray_FW {
+
+    }
+}
