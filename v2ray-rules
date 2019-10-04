@@ -59,6 +59,7 @@ def main():
     srun("nft add rule inet v2ray v2ray_FW tcp dport 1-65535 dnat ip6 to {}:{}".format(LO6_ADDR, parsed.p))
 
     if parsed.u:
+        srun("nft add rule inet v2ray v2ray_FW udp dport 53 accept")
         srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 mark set 1 tproxy ip to {}:{}".format(LO_ADDR, parsed.p))
         srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 mark set 1 tproxy ip6 to {}:{}".format(LO6_ADDR, parsed.p))
     
