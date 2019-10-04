@@ -57,7 +57,7 @@ table inet v2ray {
     }
 
     chain v2ray_PREROUTING {
-        type nat hook prerouting priority dstnat; policy accept;
+        type nat hook prerouting priority -100; policy accept;
         jump v2ray_SERVER_AC
         jump v2ray_SRC_FW
         jump v2ray_SRC_AC
@@ -67,7 +67,7 @@ table inet v2ray {
     }
 
     chain v2ray_OUTPUT {
-        type nat hook prerouting priority dstnat; policy accept;
+        type nat hook output priority -100; policy accept;
         jump v2ray_SERVER_AC
         jump v2ray_SRC_FW
         jump v2ray_SRC_AC

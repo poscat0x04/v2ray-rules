@@ -59,8 +59,8 @@ def main():
     srun("nft add rule inet v2ray v2ray_FW tcp dport 1-65535 dnat ip6 to {}:{}".format(LO6_ADDR, parsed.p))
 
     if parsed.u:
-        srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 meta mark set 1 tproxy ip to {}:{}".format(LO_ADDR, parsed.p))
-        srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 mata mark set 1 tproxy ip6 to {}:{}".format(LO6_ADDR, parsed.p))
+        srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 mark set 1 tproxy ip to {}:{}".format(LO_ADDR, parsed.p))
+        srun("nft add rule inet v2ray v2ray_FW udp dport 1-65535 mark set 1 tproxy ip6 to {}:{}".format(LO6_ADDR, parsed.p))
     
     sbpv4 = []
     sbpv6 = []
@@ -127,4 +127,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except sp.CalledProcessError as e:
+        srun("nft delete table inet v2ray")
+        print(e)
+        print("error while adding nft rules")
+        print("removed all rules", file=sys.stdout)
+        sys.exit(1)
