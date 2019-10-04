@@ -1,6 +1,6 @@
 # v2ray-rules
 
-A simple script to set up transparent proxy that supports both ipv4/ipv6 for v2ray. Inspired by ss-rules.
+A simple script for v2ray to set up a transparent proxy that supports both ipv4/ipv6. Inspired by ss-rules.
 
 ## dependencies
 
