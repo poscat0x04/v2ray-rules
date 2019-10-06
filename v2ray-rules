@@ -8,7 +8,7 @@ from typing import *
 
 LO_ADDR="127.0.0.1"
 LO6_ADDR="::1"
-TEMPLATE_PATH="./v2ray-rules-template"
+TEMPLATE_PATH="/usr/share/v2ray-rules/v2ray-rules-template"
 
 
 def srun(command: str):
